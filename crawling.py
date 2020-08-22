@@ -49,7 +49,7 @@ driver.find_element_by_xpath('//*[@id="sheet"]/ul/li[3]/a').click()
 # 2페이지에 뜨는 광고창 1번 끄기
 
 time.sleep(0.5)
-for page_roof in range(10):
+for page_roof in range(100):
     next_page()
 # next_page를 page_roof라는 폴더에 넣고 반복
 

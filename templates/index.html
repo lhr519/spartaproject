@@ -51,43 +51,46 @@
         * {
             font-family: 'Jua', sans-serif;
         }
-
-
     </style>
 </head>
 
 <body>
 <div class="jumbotron jumbotron-fluid">
     <div class="container">
-        <h2 class="display-4">ㅇㅇㅇㅇㅇ</h2>
+        <h2 class="display-4">제목</h2>
         <!--        <p class="lead">머먹지머먹지머ㅓㄱ</p>-->
     </div>
 </div>
 
 <div class="container">
     <div class="row">
+        <!--    왼쪽에 들어가는 지도-->
         <div class="col-sm">
-            <!--왼쪽에 들어가는 지도-->
             <div id="map" style="width:600px;height:440px;"></div>
         </div>
+
+        <!--    오른쪽에 들어가는 탭-->
         <div style="height:440px;width:600px;overflow:auto" class="col-sm">
-            <!--오른쪽에 들어가는 검색, 내 리뷰-->
+            <!--        탭 설정-->
             <nav>
                 <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-search"
+                    <a class="nav-item nav-link active" id="nav-search-tab" data-toggle="tab" href="#nav-search"
                        role="tab"
-                       aria-controls="nav-home" aria-selected="true">검색</a>
-                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-review" role="tab"
+                       aria-controls="nav-search" aria-selected="true">검색</a>
+                    <a class="nav-item nav-link" id="nav-review-tab" data-toggle="tab" href="#nav-review" role="tab"
                        aria-controls="nav-profile" aria-selected="false">리뷰 입력</a>
                     <a class="nav-item nav-link" id="nav-my-tab" data-toggle="tab" href="#nav-my" role="tab"
                        aria-controls="nav-profile" aria-selected="false">마이 리뷰</a>
                 </div>
             </nav>
 
+            <!--        탭 아래 페이지 설정-->
             <div class="tab-content" id="nav-tabContent">
                 <div class="tab-pane fade show active" id="nav-search" role="tabpanel" aria-labelledby="nav-search-tab">
+                    <!--                검색 탭-->
                     <div class="wrap">
                         <p></p>
+                        <!--                    검색창-->
                         <div class="input-group mb-3">
                             <input id="search" type="text" class="form-control" placeholder="맛집 이름 입력">
                             <div class="input-group-append">
@@ -97,23 +100,23 @@
                             </div>
                         </div>
                     </div>
+                    <!--                리스트-->
                     <p></p>
                     <ul class="list-group" id="matjip-box"></ul>
-
                 </div>
-
+                <!--            리뷰 입력 탭-->
                 <div class="tab-pane fade" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
                     <form>
                         <div id="post-box" class="form-post">
                             <div>
                                 <p></p>
                                 <div class="form-group">
-                                    <label for="post-url">맛집 이름</label>
-                                    <input id="post-url" class="form-control" placeholder="">
+                                    <label for="post-title">맛집 이름</label>
+                                    <input id="post-title" class="form-control" placeholder="">
                                 </div>
                                 <div class="form-group">
                                     <label for="post-comment">리뷰</label>
-                                    <textarea id="post-comment" class="form-control" rows="2"></textarea>
+                                    <textarea id="post-comment" class="form-control" rows="3"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <input type="file" class="form-control-file" id="exampleFormControlFile1">
@@ -127,25 +130,22 @@
                         </div>
                     </form>
                 </div>
-
-
+                <!--            마이 리뷰 탭-->
                 <div class="tab-pane fade" id="nav-my" role="tabpanel" aria-labelledby="nav-my-tab">
                     <p></p>
                     <center>
-                        <div class="card" style="width: 400px;">
-                            <img class="card-img-top" src="https://craftlog.com/m/i/5978686=s1280=h960"
-                                 alt="Card image cap">
-                            <div class="card-body">
-                                <p class="card-text">리뷰 내용</p>
-                            </div>
-                        </div>
+                        <!--                        <div class="card" style="width: 400px;">-->
+                        <!--                            <img class="card-img-top" src="https://craftlog.com/m/i/5978686=s1280=h960"-->
+                        <!--                                 alt="Card image cap">-->
+                        <!--                            <div class="card-body">-->
+                        <!--                                <p class="card-text">리뷰 내용</p>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
                     </center>
                 </div>
-
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <script>
@@ -153,25 +153,28 @@
         showList();
     });
 
+    // 초기 페이지 지도 설정
     var mapOptions = {center: new naver.maps.LatLng(37.559652, 126.945587), zoom: 15};
     var map = new naver.maps.Map('map', mapOptions);
 
-    function postArticle() {
-        let url = $('#post-url').val()
-        let comment = $('#post-comment').val()
+    // function postArticle() {
+    //     let url = $('#post-url').val()
+    //     let comment = $('#post-comment').val()
+    //
+    //     $.ajax({
+    //         type: "POST",
+    //         url: "/memo",
+    //         data: {'url': url, 'comment': comment},
+    //         success: function (response) { // 성공하면
+    //             if (response["result"] == "success") {
+    //                 alert(response["msg"]);
+    //
+    //             }
+    //         }
+    //     })
+    // }
 
-        $.ajax({
-            type: "POST",
-            url: "/memo",
-            data: {'url': url, 'comment': comment},
-            success: function (response) { // 성공하면
-                if (response["result"] == "success") {
-                    alert(response["msg"]);
-                }
-            }
-        })
-    }
-
+    //검색
     function mySearch() {
         let search = $('#search').val();
         if (search == '') {
@@ -189,23 +192,31 @@
             success: function (response) {
                 // 맛집 요청 성공 여부 검사
                 if (response['result'] == 'success') {
-                    // 전달받은 맛집을 matjipList에 저장한다.
+                    // 전달받은 맛집을 matjip에 저장한다.
                     let matjip = response['matjip'];
-                    matjip = getMatjipListWithGeoData(matjip);
-                    makeList(matjip['title'], matjip['category']);
+
+                    console.log(matjip);
+                    for (i = 0; i < matjip.length; i++) {
+                        matjip[i] = getMatjipListWithGeoData(matjip[i]);
+                        makeList(matjip[i]['title'], matjip[i]['category']);
+                    }
+                    //리스트 새로고침 버튼
                     $('#matjip-box').append(`<p></p><center>
                         <button type="button" style="background-color:#00462a; color:white; "
                                 class="btn btn-success" onclick=window.location.reload()>리스트 새로고침
                         </button>
                     </center>`);
                     drawMap(matjip);
+
                 } else {
                     alert('해당 이름의 맛집이 없습니다.');
+                    window.location.reload();
                 }
             }
         });
     }
 
+    //처음 로딩
     function showList() {
         $.ajax({
             type: 'GET',
@@ -217,12 +228,12 @@
                     for (let i = 0; i < matjip.length; i++) {
                         makeList(matjip[i]['title'], matjip[i]['category'])
                     }
-
                 }
             }
         });
     }
 
+    //box에 append
     function makeList(title, category) {
         let tempHtml = `<li class="list-group-item">
                     <h5 class="card-title"><a href="#" class="matjip-title">${title}</a></h5>
@@ -231,7 +242,7 @@
         $('#matjip-box').append(tempHtml);
     }
 
-    // matjipList 좌표 정보를 바꾸기
+    // matjip 좌표 정보를 바꾸기
     function getMatjipListWithGeoData(matjip) {
         // 반환할 맛집 목록
         let mapx = matjip['mapx'];
@@ -244,29 +255,65 @@
         return matjip;
     }
 
-    function drawMap(matjip) {
-        // 1등 맛집의 위치 정보를 geoData에 저장합니다.
-        let geoData = matjip['geoData'];
-        // 1등 맛집을 지도의 중심에 놓습니다.
-        let marker = new naver.maps.LatLng(geoData['lat'], geoData['lng']),
-            map = new naver.maps.Map('map', {
-                center: marker,
-                zoom: 15
-            })
-    }
+    //검색한 맛집 지도에 마커 표시
+    function drawMap(matjipList) {
+        // 맛집의 위치 정보를 geoData에 저장합니다.
+        let geoData = matjipList[0]['geoData'];
+        let markerList = [];
+        let contents = [];
 
-    function drawMap(matjip) {
-        // 1등 맛집의 위치 정보를 geoData에 저장합니다.
-        let geoData = matjip['geoData'];
         let numberOne = new naver.maps.LatLng(geoData['lat'], geoData['lng']),
             map = new naver.maps.Map('map', {
                 center: numberOne,
-                zoom: 18
+                zoom: 15
             }),
             marker = new naver.maps.Marker({
                 position: numberOne,
                 map: map
             });
+        for (let i = 0; i < matjipList.length; i++) {
+            let matjip = matjipList[i];
+            let position = new naver.maps.LatLng(matjip['geoData']['lat'], matjip['geoData']['lng'])
+            marker = new naver.maps.Marker({
+                position: position,
+                map: map
+            });
+            let contentString = `<div class="iw_inner">
+                          <h6>${matjip['title']}</h6>
+                                    </div>`;
+            contents.push(contentString);
+            markerList.push(marker);
+        }
+        const matjipElement = $('.matjip-title');
+
+        for (let i = 0; i < markerList.length; i++) {
+            let marker = markerList[i];
+            let infowindow = new naver.maps.InfoWindow({
+                content: contents[i],
+                maxWidth: 140,
+                backgroundColor: "#eee",
+                anchorSize: new naver.maps.Size(10, 10),
+                anchorSkew: true,
+                anchorColor: "#eee",
+                pixelOffset: new naver.maps.Point(0, -20)
+            });
+            naver.maps.Event.addListener(marker, "click", function (e) {
+                if (infowindow.getMap()) {
+                    infowindow.close();
+                } else {
+                    infowindow.open(map, marker);
+                }
+            });
+
+            matjipElement[i].addEventListener('click', function (e) {
+                e.preventDefault();
+                if (infowindow.getMap()) {
+                    infowindow.close();
+                } else {
+                    infowindow.open(map, marker);
+                }
+            })
+        }
     }
 
     // TM128 좌표를 위도(lat), 경도(lng) 딕셔너리로 반환

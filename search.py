@@ -58,19 +58,39 @@ for name in names:
     keyword = f'{mtjp}'
     # 맛집 리스트를 받아옵니다.
     search = get_naver_result(keyword)
-    if (search != 0):
-        if (len(docs)==0):
+    if (search != 0): #검색 결과가 있으면
+        if (len(docs)==0): #검색 결과가 딱 하나 있으면
             docs.append(search)
-        else:
+        else: #검색 결과가 여러가지 있으면
             boo = 0
             for i in range(len(docs)):
-                if (docs[i]['mapx']==search['mapx']):
+                if (docs[i]['mapx']==search['mapx']): #중복 거르기
                     boo = 1
                     break
 
-            if (boo==0):
-                docs.append(search)
-
+            if (boo==0): #처음 나오는 맛집 이름이면
+                if '음식점' in search['category']:
+                    docs.append(search)
+                elif '양식' in search['category']:
+                    docs.append(search)
+                elif '일식' in search['category']:
+                    docs.append(search)
+                elif '이탈리아음식' in search['category']:
+                    docs.append(search)
+                elif '카페,디저트' in search['category']:
+                    docs.append(search)
+                elif '한식' in search['category']:
+                    docs.append(search)
+                elif '도시락,컵밥' in search['category']:
+                    docs.append(search)
+                elif '분식' in search['category']:
+                    docs.append(search)
+                elif '중식' in search['category']:
+                    docs.append(search)
+                elif '육류,고기요리' in search['category']:
+                    docs.append(search)
+                elif '술집' in search['category']:
+                    docs.append(search)
 
 # 맛집 정보를 저장합니다.
 db.matjip.insert_many(docs)
