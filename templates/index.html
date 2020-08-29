@@ -120,7 +120,7 @@
                                     <textarea id="post-comment" class="form-control" rows="3"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <input type="file" class="form-control-file" id="post-pic">
+                                    <input type="file" name="file" class="form-control-file" id="post-pic">
                                 </div>
                                 <p></p>
                                 <button type="button" class="btn btn-primary"
@@ -154,17 +154,48 @@
         let comment = $('#post-comment').val()
         let pic = $('#post-pic').val()
 
+        if (title == "") {
+            alert("맛집 이름을 입력해주세요")
+            $("#post-title").focus()
+            return
+        } else if (comment == "") {
+            alert("리뷰를 입력해주세요")
+            $("#post-comment").focus()
+            return
+        } else if (pic == "") {
+            alert("파일를 입력해주세요")
+            $("#post-comment").focus()
+            return
+        }
+
         $.ajax({
-            type: "POST",
-            url: "/review",
-            data: {'title': title, 'comment': comment, 'pic': pic},
-            success: function (response) {
-                if (response["result"] == "success") {
-                    alert(response["msg"]);
-                    window.location.reload()
+                type: "POST",
+                url: "/review",
+                data: {'title': title, 'comment': comment},
+                success: function (response) {
+                    if (response["result"] == "success") {
+                        alert(response["msg"]);
+                        fileSave()
+                        //window.location.reload()
+                    }
                 }
             }
-        })
+        )
+    }
+
+    function fileSave() {
+        var file_data = $("#post-pic").prop("files")[0]; // Getting the properties of file from file field
+        var form_data = new FormData(); // Creating object of FormData class
+        form_data.append("file", file_data)
+
+        $.ajax({
+            url: '/file',
+            type: 'POST',
+            processData: false, // important
+            contentType: false, // important
+            dataType: 'json',
+            data: form_data
+        });
     }
 
     //검색
@@ -235,8 +266,10 @@
             success: function (response) {
                 if (response['result'] == 'success') {
                     let review = response['review'];
+                    let review_pic = response['review_pic']
                     for (let i = 0; i < review.length; i++) {
-                        makeReview(review[i]['title'], review[i]['comment'], review[i]['pic'])
+                        console.log(review_pic)
+                        makeReview(review[i]['title'], review[i]['comment'], review_pic[i]['pic'])
                     }
                 }
             }
@@ -244,10 +277,11 @@
     }
 
     function makeReview(title, comment, pic) {
+        console.log(pic)
         let tempHtml = `<p></p>
                     <center>
                         <div class="card" style="width: 400px;">
-                            <img class="card-img-top" src="${pic}" alt="Card image cap">
+                            <img class="card-img-top" src="static/${pic}" alt="Card image cap">
                             <div class="card-body">
                                 <h5>${title}</h5>
                                 <p class="card-text">${comment}</p>

@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+import os
 from pymongo import MongoClient
 
 app = Flask(__name__)
@@ -19,7 +20,8 @@ def showList():
 @app.route('/reviewlist', methods=['GET'])
 def reviewList():
     review = list(db.review.find({}, {'_id': False}))
-    return jsonify({'result': 'success', 'review': review})
+    review_pic = list(db.review_pic.find({}, {'_id': False}))
+    return jsonify({'result': 'success', 'review': review, 'review_pic' : review_pic})
 
 @app.route('/search', methods=["GET"])
 def get_matjip():
@@ -39,15 +41,20 @@ def get_matjip():
 def postArticle():
     title = request.form['title']
     comment = request.form['comment']
-    pic = request.form['pic']
     db.review.insert_one({
         'title': title,
         'comment': comment,
-        'pic': pic
     })
-
     return jsonify({'result': 'success', 'msg': '저장되었습니다!'})
 
+@app.route('/file', methods=['POST'])
+def fileSave():
+    file = request.files['file']
+    file.save(os.path.join(os.getcwd()+"/static", file.filename))
+    db.review_pic.insert_one({
+        'pic': file.filename
+    })
+    return jsonify({'result': 'success', 'msg': '저장되었습니다!'})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
